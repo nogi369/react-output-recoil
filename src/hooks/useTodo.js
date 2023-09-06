@@ -1,23 +1,24 @@
-import { INIT_TODO_LIST, INIT_UNIQUE_ID } from "../constants/data";
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  todoListState,
+  todoUniqueIdState,
+  todoSearchKeywordState,
+} from "../store/atoms/todo";
+import { searchedTodoListState } from "../store/selectors/todo";
 
 export const useTodo = () => {
-  // デフォルトTodoList
-  const [originTodoList, setOriginTodoList] = useState(INIT_TODO_LIST);
+  const [todoList, setTodoList] = useRecoilState(todoListState);
   // 採番ID
-  const [uniqueId, setUniqueId] = useState(INIT_UNIQUE_ID);
+  const [uniqueId, setUniqueId] = useRecoilState(todoUniqueIdState);
+  // 検索キーワード
+  const [searchKeyword, setSearchKeyword] = useRecoilState(
+    todoSearchKeywordState,
+  );
   // 入力値
   const [addInputValue, setAddInputValue] = useState("");
-  // 検索キーワード
-  const [searchKeyword, setSearchKeyword] = useState("");
   // 表示用TodoList
-  const showTodoList = useMemo(() => {
-    return originTodoList.filter((todo) => {
-      // 修正箇所
-      const regexp = new RegExp("^" + searchKeyword, "i");
-      return todo.title.match(regexp);
-    });
-  }, [originTodoList, searchKeyword]);
+  const showTodoList = useRecoilValue(searchedTodoListState);
 
   // 入力値の変更処理
   const onChangeAddInputValue = (e) => setAddInputValue(e.target.value);
@@ -30,15 +31,14 @@ export const useTodo = () => {
       const nextUniqueId = uniqueId + 1;
 
       // 新規作成するTodoを含めた更新後のTodoList
-      const newTodoList = [
-        ...originTodoList,
+      setTodoList([
+        ...todoList,
         {
           id: nextUniqueId,
           title: addInputValue,
         },
-      ];
+      ]);
 
-      setOriginTodoList(newTodoList);
       setUniqueId(nextUniqueId);
       setAddInputValue("");
     }
@@ -47,9 +47,7 @@ export const useTodo = () => {
   const handleDeleteTodo = (targetId, targetTitle) => {
     // https://fuuno.net/nani/nani02/nani02.html
     if (window.confirm(`「${targetTitle}」のtodoを削除しますか？`)) {
-      const newTodoList = originTodoList.filter((todo) => todo.id !== targetId);
-
-      setOriginTodoList(newTodoList);
+      setTodoList(todoList.filter((todo) => todo.id !== targetId));
     }
   };
 

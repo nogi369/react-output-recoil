@@ -36,10 +36,12 @@ export const TodoTemplate = () => {
       />
       </section>
       <section  className={styles.common}>
-      <TodoList
-      todoList={showTodoList}
-      handleDeleteTodo={handleDeleteTodo}
-      />
+        {showTodoList.length > 0 && (
+        <TodoList
+        todoList={showTodoList}
+        handleDeleteTodo={handleDeleteTodo}
+        />
+        )}
       </section>
     </div>
   )

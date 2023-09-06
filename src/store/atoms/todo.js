@@ -6,12 +6,12 @@ export const todoListState = atom({
   default: INIT_TODO_LIST,
 });
 
-export const todoUniquIdState = atom({
-  key: "todoUniquIdState",
+export const todoUniqueIdState = atom({
+  key: "todoUniqueIdState",
   default: INIT_UNIQUE_ID,
 });
 
-export const todoListSearchKeywordState = atom({
-  key: "todoListSearchKeywordState",
+export const todoSearchKeywordState = atom({
+  key: "todoSearchKeywordState",
   default: "",
 });
