@@ -1,6 +1,7 @@
 import { atom } from "recoil";
 import { INIT_TODO_LIST, INIT_UNIQUE_ID } from "../../constants/data";
 
+// 検索前のTodoList
 export const todoListState = atom({
   key: "todoListState",
   default: INIT_TODO_LIST,
